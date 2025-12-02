@@ -45,7 +45,7 @@ export default function Home() {
 
         } else {
           alert("Subscription Failed: " + result.message)
-          setEmail
+          setEmail("")
         }
       })
       .catch((error) => console.error(error));
