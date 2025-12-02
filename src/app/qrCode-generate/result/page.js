@@ -1,13 +1,15 @@
-"use client"
-import React, { useState, useEffect, useRef } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
-import { useRouter } from 'next/navigation';
-import { Download } from 'lucide-react';
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import { useRouter } from "next/navigation";
+import { Download, Home, QrCode, Sparkles, ExternalLink, Check } from "lucide-react";
 
 const Page = () => {
-  const router = useRouter()
-  const [newQrCode, setNewQrCode] = useState([])
-  const qrRef = useRef(null)
+  const router = useRouter();
+  const qrRef = useRef(null);
+  const [newQrCode, setNewQrCode] = useState(null);
+  const [downloaded, setDownloaded] = useState(false);
 
   useEffect(() => {
     const storedQrCode = JSON.parse(localStorage.getItem("qrCode")) || [];
@@ -16,73 +18,133 @@ const Page = () => {
 
   const handleDownload = () => {
     const canvas = qrRef.current;
-    const url = canvas.toDataURL("image/png");
+    const padding = 20;
+    const size = canvas.width + padding * 2;
+
+    const paddedCanvas = document.createElement("canvas");
+    paddedCanvas.width = size;
+    paddedCanvas.height = size;
+
+    const ctx = paddedCanvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(canvas, padding, padding);
+
     const link = document.createElement("a");
-    link.href = url;
+    link.href = paddedCanvas.toDataURL("image/png");
     link.download = "MyQRCode.png";
     link.click();
+
+    setDownloaded(true);
+    setTimeout(() => setDownloaded(false), 2000);
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-900 p-4 sm:p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-      {/* Background circles */}
-      <div className="absolute w-72 sm:w-96 h-72 sm:h-96 bg-purple-500/30 rounded-full blur-3xl top-10 left-10 -z-10" />
-      <div className="absolute w-[20rem] sm:w-[30rem] h-[20rem] sm:h-[30rem] bg-pink-500/20 rounded-full blur-3xl bottom-20 right-10 -z-10" />
-
-      {/* Card */}
-      <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-6 max-w-md w-full border border-white/20">
-
-        {/* QR Section */}
-        <div className="flex flex-col items-center gap-3 w-full">
-          <QRCodeCanvas
-            ref={qrRef}
-            value={newQrCode?.qrcode}
-            size={200}
-            className="rounded-xl border border-white/20 p-3 bg-white/10 shadow-lg"
-          />
-
-          <p className="text-sm sm:text-base text-gray-300 mt-2 break-all text-center">
-            {newQrCode?.url || "No URL available"}
-          </p>
-
-          <div className="absolute top-9 right-1 md:top-9 md:right-0 flex flex-col justify-center items-center gap-1">
-            <Download
-              onClick={handleDownload}
-              className="w-10 h-10 text-black bg-gray-200 p-2 rounded-full cursor-pointer animate-bounce"
-            />
-            <span className="text-xs animate-pulse text-white">download</span>
+      {/* Main Card */}
+      <div className="relative z-10 w-full max-w-md">
+        {/* Success Icon */}
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30">
+            <Check className="w-8 h-8 text-green-400" />
           </div>
         </div>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-4 w-full justify-center">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            QR Code Generated! 🎉
+          </h1>
+          <p className="text-slate-400">Your QR code is ready to download</p>
+        </div>
 
+        {/* QR Card */}
+        <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-2xl p-5 md:p-6 mb-6">
+          {/* QR Code */}
+          <div className="flex justify-center mb-4">
+            <div className="bg-white p-4 rounded-2xl">
+              <QRCodeCanvas
+                ref={qrRef}
+                value={newQrCode?.qrcode || "https://urlino.com"}
+                size={180}
+              />
+            </div>
+          </div>
+
+          {/* URL */}
+          <div className="mb-4">
+            <label className="text-xs text-slate-500 uppercase tracking-wider mb-2 block text-center">
+              Encoded URL
+            </label>
+            <a
+              href={newQrCode?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm break-all text-center"
+            >
+              <ExternalLink className="w-4 h-4 flex-shrink-0" />
+              <span className="line-clamp-2">{newQrCode?.url || "No URL available"}</span>
+            </a>
+          </div>
+
+          {/* Download Button */}
           <button
-            onClick={() => router.push("/")}
-            className="flex-1 cursor-pointer py-2 rounded-xl bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
+            onClick={handleDownload}
+            className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
+              downloaded
+                ? "bg-green-500/20 text-green-400 border border-green-500/50"
+                : "bg-gradient-to-r from-purple-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02]"
+            }`}
           >
-            Back to Home
+            {downloaded ? (
+              <>
+                <Check className="w-5 h-5" />
+                Downloaded!
+              </>
+            ) : (
+              <>
+                <Download className="w-5 h-5" />
+                Download QR Code
+              </>
+            )}
           </button>
+        </div>
 
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3">
           <button
             onClick={() => router.push("/qrCode-generate")}
-            className="flex-1 cursor-pointer py-2 rounded-xl bg-gradient-to-r from-green-400 via-teal-500 to-lime-400 text-white font-semibold shadow-lg hover:scale-105 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
           >
+            <Sparkles className="w-5 h-5" />
             Generate Another
           </button>
 
-          <button
-            onClick={() => router.push("/my-QrCode")}
-            className="flex-1 cursor-pointer py-2 rounded-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 text-white font-semibold shadow-lg hover:scale-105 transition-all"
-          >
-            My QR Codes
-          </button>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => router.push("/my-QrCode")}
+              className="py-3 bg-slate-700/50 border border-slate-600 text-white rounded-xl font-medium hover:bg-slate-700 transition-all flex items-center justify-center gap-2"
+            >
+              <QrCode className="w-5 h-5 text-purple-400" />
+              My QR Codes
+            </button>
 
+            <button
+              onClick={() => router.push("/")}
+              className="py-3 bg-slate-800/50 border border-slate-700 text-slate-300 rounded-xl font-medium hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2"
+            >
+              <Home className="w-5 h-5 text-cyan-400" />
+              Home
+            </button>
+          </div>
         </div>
       </div>
-    </main>
-  )
-}
+    </div>
+  );
+};
 
 export default Page;

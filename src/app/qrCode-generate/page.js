@@ -1,90 +1,107 @@
-"use client"
-import React, { useState } from 'react'
-import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+"use client";
+
+import React, { useState } from "react";
+import { LoaderCircle, QrCode, Link2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [loading, setloading] = useState(false)
-  const [url, setUrl] = useState("")
-  const [error, setError] = useState(null)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const Generate = () => {
-    setloading(true)
+  const handleGenerate = () => {
     if (!url.trim()) {
-      setloading(false)
-      setError("Please write your URL");
+      setError("Please enter a valid URL");
       return;
     }
 
-    const newqrcode = { qrcode: url, url: url };
-    const existingqrCode = JSON.parse(localStorage.getItem("qrCode")) || [];
-    const alreadyExists = existingqrCode.some((QrCode) => QrCode.url === url);
+    setLoading(true);
+    setError("");
+
+    const newQrCode = { qrcode: url, url: url };
+    const existingQrCodes = JSON.parse(localStorage.getItem("qrCode")) || [];
+    const alreadyExists = existingQrCodes.some((qr) => qr.url === url);
 
     if (!alreadyExists) {
-      existingqrCode.push(newqrcode);
-      localStorage.setItem("qrCode", JSON.stringify(existingqrCode));
+      existingQrCodes.push(newQrCode);
+      localStorage.setItem("qrCode", JSON.stringify(existingQrCodes));
     }
 
-    setError(null);
-    router.push("/qrCode-generate/result")
+    router.push("/qrCode-generate/result");
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-      {/* Background blobs */}
-      <div className="absolute w-80 sm:w-96 h-80 sm:h-96 bg-purple-500/20 rounded-full blur-3xl top-20 left-10 -z-10"></div>
-      <div className="absolute w-[20rem] sm:w-[30rem] h-[20rem] sm:h-[30rem] bg-pink-500/20 rounded-full blur-3xl bottom-10 right-10 -z-10"></div>
+      {/* Main Card */}
+      <div className="relative z-10 w-full max-w-md">
+        {/* Icon */}
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+            <QrCode className="w-8 h-8 text-white" />
+          </div>
+        </div>
 
-      {/* Card */}
-      <div className="bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-3xl w-full max-w-lg p-6 sm:p-8 relative overflow-hidden">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            Generate QR Code
+          </h1>
+          <p className="text-slate-400">
+            Convert any URL into a scannable QR code
+          </p>
+        </div>
 
-        {/* Glow Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-blue-400/20 opacity-30 rounded-3xl pointer-events-none" />
+        {/* Form Card */}
+        <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-2xl p-5 md:p-6">
+          {/* Input */}
+          <div className="mb-4">
+            <label className="text-slate-300 font-medium mb-2 block text-sm">
+              <Link2 className="w-4 h-4 inline-block mr-2 text-cyan-400" />
+              Enter URL
+            </label>
+            <input
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              type="url"
+              placeholder="https://example.com"
+              className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all"
+            />
+          </div>
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-6 tracking-wide drop-shadow-md">
-          Generate Your QR Code Easily
-        </h2>
+          {/* Error */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
+              <p className="text-red-400 text-sm text-center">{error}</p>
+            </div>
+          )}
 
-        <div className="space-y-4">
-          <input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            type="text"
-            placeholder="Paste your URL here..."
-            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-gray-300 
-                        focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/20
-                        border border-white/20 transition-all duration-300"
-          />
-
+          {/* Button */}
           <button
-            onClick={Generate}
+            onClick={handleGenerate}
             disabled={loading}
-            className={`w-full py-3 font-semibold rounded-xl shadow-lg flex items-center justify-center gap-2 text-white transition-all duration-300 ${loading
-              ? "bg-gray-400 opacity-80 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:shadow-pink-500/30"
-              }`}
+            className="w-full py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
           >
             {loading ? (
               <>
-                <LoaderCircle className="w-5 h-5 animate-spin text-white" />
-                <span>Generating...</span>
+                <LoaderCircle className="w-5 h-5 animate-spin" />
+                Generating...
               </>
             ) : (
-              "Generate"
+              <>
+                <QrCode className="w-5 h-5" />
+                Generate QR Code
+              </>
             )}
           </button>
         </div>
-
-        {error && (
-          <p className="text-red-400 text-center mt-4 font-medium">
-            ❌ {error}
-          </p>
-        )}
       </div>
-    </main>
+    </div>
   );
-}
+};
 
 export default Page;
