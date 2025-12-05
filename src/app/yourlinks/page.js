@@ -22,7 +22,7 @@ const Page = () => {
 
   useEffect(() => {
     const storedLinks = JSON.parse(localStorage.getItem("links")) || [];
-    setMyLinks(storedLinks);
+    setMyLinks(storedLinks); 
     setIsLoading(false);
   }, []);
 

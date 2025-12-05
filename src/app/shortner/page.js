@@ -220,8 +220,8 @@ const Page = () => {
                       <button
                         onClick={handleCopy}
                         className={`flex-1 py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${copied
-                            ? "bg-green-500/20 text-green-400 border border-green-500/50"
-                            : "bg-slate-700/50 text-white border border-slate-600"
+                          ? "bg-green-500/20 text-green-400 border border-green-500/50"
+                          : "bg-slate-700/50 text-white border border-slate-600"
                           }`}
                       >
                         {copied ? <Check /> : <Copy />}

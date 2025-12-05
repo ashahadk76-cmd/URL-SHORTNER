@@ -14,6 +14,7 @@ import {
   Shield,
   Globe,
 } from "lucide-react";
+import { set } from "mongoose";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -40,6 +41,8 @@ export default function Home() {
           setTimeout(() => setMessage(""), 3000);
         } else {
           setMessage("Failed: " + result.message);
+          setTimeout(() => setMessage(""), 3000);
+          setEmail("");
         }
       })
       .catch(() => {
@@ -214,7 +217,7 @@ export default function Home() {
               </div>
 
               {message && (
-                <div className="mt-4 flex items-center justify-center gap-2 text-green-400">
+                <div className="mt-4 flex items-center justify-center gap-2 text-cyan-50">
                   <Check className="w-5 h-5" />
                   {message}
                 </div>
