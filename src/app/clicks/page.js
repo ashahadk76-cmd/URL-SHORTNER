@@ -8,12 +8,9 @@ const Page = () => {
   const [clicks, setClicks] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef(null);
 
 
-  function handleFocus() {
-    inputRef.current.focus()
-  }
+  
   
 
   const handleClick = () => {
@@ -89,7 +86,6 @@ const Page = () => {
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
               <input
-                ref={inputRef}
                 value={shortUrl}
                 onChange={(e) => setShortUrl(e.target.value)}
                 type="text"
@@ -101,7 +97,7 @@ const Page = () => {
 
           {/* Button */}
           <button
-            onClick={()=>{(handleClick);handleFocus();}}
+            onClick={handleClick}
             disabled={loading}
             className=" cursor-pointer  w-full py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
           >

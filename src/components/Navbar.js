@@ -38,9 +38,12 @@ const Navbar = () => {
       <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-3 md:py-4 px-4 md:px-8 shadow-2xl relative border-b border-slate-700 backdrop-blur-sm bg-opacity-95 z-50">
         <div className="container mx-auto max-w-7xl flex justify-between items-center">
           {/* Logo - Rare & Professional */}
+          
           <div className="flex items-center group cursor-pointer">
+            
             <div className="relative">
               {/* Main Logo Icon */}
+              
               <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-cyan-400/25 group-hover:scale-110 transition-all duration-500 rotate-0 group-hover:rotate-3">
                 <svg
                   className="w-4 h-4 md:w-6 md:h-6 text-white"
@@ -61,9 +64,11 @@ const Navbar = () => {
 
             {/* Text */}
             <div className="ml-2 md:ml-3 flex flex-col">
+              <Link href={"/"} >
               <span className="bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-blue-200 transition-all duration-500 font-bold text-lg md:text-xl tracking-tight">
                 Urlino
               </span>
+              </Link>
               <span className="text-[10px] md:text-xs text-slate-400 group-hover:text-cyan-300 transition-colors duration-500 tracking-wide font-medium hidden sm:block">
                 URL Mastery
               </span>
@@ -121,9 +126,9 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => setOpen(!open)}
-                className="px-4 md:px-6 py-2 md:py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 flex items-center gap-2 md:gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border border-slate-600 hover:border-slate-500 group"
+                className="  cursor-pointer px-4 md:px-6 py-2 md:py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 flex items-center gap-2 md:gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border border-slate-600 hover:border-slate-500 group"
               >
-                <LayoutDashboard className="w-4 h-4 md:w-5 md:h-5 text-cyan-400 group-hover:rotate-12 transition-transform" />
+                <LayoutDashboard className="  w-4 h-4 md:w-5 md:h-5 text-cyan-400 group-hover:rotate-12 transition-transform" />
                 <span className="tracking-wide text-sm md:text-base">
                   Dashboard
                 </span>
