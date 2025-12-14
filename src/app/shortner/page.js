@@ -6,14 +6,11 @@ import {
   Link2,
   Sparkles,
   ArrowRight,
-  Globe,
   Zap,
   Shield,
   Copy,
   Check,
-  ExternalLink,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const Page = () => {
@@ -24,7 +21,6 @@ const Page = () => {
   const [generatedUrl, setGeneratedUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const domain = process.env.NEXT_PUBLIC_URL || "https://urlino.com";
 
@@ -44,6 +40,15 @@ const Page = () => {
           setGeneratedUrl(`${domain}/${shortUrl}`);
           setSuccess(true);
           setLoading(false);
+
+          // ✅ SAVE TO LOCALSTORAGE
+          const newLink = { orignalUrl, shortUrl };
+          const existingLinks = JSON.parse(localStorage.getItem("links")) || [];
+          const alreadyExists = existingLinks.find((link) => link.shortUrl === shortUrl);
+          if (!alreadyExists) {
+            existingLinks.push(newLink);
+            localStorage.setItem("links", JSON.stringify(existingLinks));
+          }
         } else {
           setError(result.message);
           setLoading(false);
@@ -70,7 +75,7 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen  bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 -left-10 w-52 h-52 md:w-80 md:h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -79,7 +84,6 @@ const Page = () => {
 
       <div className="relative z-10 px-4 py-8 md:px-8 md:py-12">
         <div className="max-w-6xl mx-auto">
-
           {/* Header */}
           <div className="text-center mb-10">
             <div className="mx-auto w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md mb-4">
@@ -102,11 +106,9 @@ const Page = () => {
 
           {/* Main Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
             {/* Left Side */}
             <div>
               <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 md:p-8">
-
                 {!success ? (
                   <>
                     {/* Title */}
@@ -133,7 +135,6 @@ const Page = () => {
 
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-5">
-
                       {/* Original URL */}
                       <div>
                         <label className="text-slate-300 font-medium text-sm">
@@ -154,9 +155,8 @@ const Page = () => {
                         <label className="text-slate-300 font-medium text-sm">
                           Custom Short URL
                         </label>
-
                         <div className="flex mt-1">
-                          <span className="px-3 bg-slate-700/50 border border-r-0 border-slate-600 text-slate-400 rounded-l-xl text-sm">
+                          <span className="px-3 py-3 bg-slate-700/50 border border-r-0 border-slate-600 text-slate-400 rounded-l-xl text-sm flex items-center">
                             {domain}/
                           </span>
                           <input
@@ -190,16 +190,13 @@ const Page = () => {
                     </form>
                   </>
                 ) : (
-
                   /* Success Box */
                   <div className="text-center">
                     <div className="w-16 h-16 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Check className="w-8 h-8 text-green-400" />
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white">
-                      URL Created
-                    </h3>
+                    <h3 className="text-2xl font-bold text-white">URL Created</h3>
 
                     <p className="text-slate-400 mt-2 mb-6">
                       Your short URL is ready
@@ -216,15 +213,15 @@ const Page = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-
                       <button
                         onClick={handleCopy}
-                        className={`flex-1 py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${copied
-                          ? "bg-green-500/20 text-green-400 border border-green-500/50"
-                          : "bg-slate-700/50 text-white border border-slate-600"
-                          }`}
+                        className={`flex-1 py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${
+                          copied
+                            ? "bg-green-500/20 text-green-400 border border-green-500/50"
+                            : "bg-slate-700/50 text-white border border-slate-600"
+                        }`}
                       >
-                        {copied ? <Check /> : <Copy />}
+                        {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                         {copied ? "Copied!" : "Copy URL"}
                       </button>
 
@@ -269,9 +266,7 @@ const Page = () => {
                     <Shield className="text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold">
-                      Secure & Reliable
-                    </h3>
+                    <h3 className="text-white font-semibold">Secure & Reliable</h3>
                     <p className="text-slate-400 text-sm">
                       Enterprise-grade protection for your links.
                     </p>
@@ -296,28 +291,21 @@ const Page = () => {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3 mt-4">
                 <div className="bg-slate-800/40 p-4 rounded-xl text-center">
-                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">
-                    10K+
-                  </h2>
+                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">10K+</h2>
                   <p className="text-slate-400 text-xs mt-1">URLs</p>
                 </div>
 
                 <div className="bg-slate-800/40 p-4 rounded-xl text-center">
-                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">
-                    99.9%
-                  </h2>
+                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">99.9%</h2>
                   <p className="text-slate-400 text-xs mt-1">Uptime</p>
                 </div>
 
                 <div className="bg-slate-800/40 p-4 rounded-xl text-center">
-                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">
-                    50ms
-                  </h2>
+                  <h2 className="text-xl md:text-2xl font-bold text-cyan-400">50ms</h2>
                   <p className="text-slate-400 text-xs mt-1">Redirect</p>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

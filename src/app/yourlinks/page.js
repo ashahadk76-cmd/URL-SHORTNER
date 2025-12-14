@@ -22,7 +22,7 @@ const Page = () => {
 
   useEffect(() => {
     const storedLinks = JSON.parse(localStorage.getItem("links")) || [];
-    setMyLinks(storedLinks); 
+    setMyLinks(storedLinks);
     setIsLoading(false);
   }, []);
 
@@ -34,11 +34,11 @@ const Page = () => {
 
   const domain = process.env.NEXT_PUBLIC_URL || "https://urlino.com";
 
-  // Filter links based on search
+  // ✅ FIXED: orignalUrl (not originalUrl)
   const filteredLinks = myLinks.filter(
     (link) =>
       link.shortUrl?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      link.originalUrl?.toLowerCase().includes(searchTerm.toLowerCase())
+      link.orignalUrl?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -63,12 +63,10 @@ const Page = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-8 md:mb-12">
-            {/* Icon */}
             <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl md:rounded-3xl shadow-lg shadow-cyan-500/25 mb-4 md:mb-6 group hover:scale-110 transition-transform duration-300">
               <Link2 className="w-8 h-8 md:w-10 md:h-10 text-white" />
             </div>
 
-            {/* Title */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
               <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
                 Your Shortened
@@ -83,15 +81,10 @@ const Page = () => {
               Manage all your shortened URLs in one place
             </p>
 
-            {/* Stats Badge */}
             <div className="inline-flex items-center gap-2 mt-4 md:mt-6 px-4 md:px-6 py-2 md:py-3 bg-slate-800/50 backdrop-blur-sm rounded-full border border-slate-700">
               <LinkIcon className="w-4 h-4 md:w-5 md:h-5 text-cyan-400" />
-              <span className="text-slate-300 text-sm md:text-base">
-                Total Links:{" "}
-              </span>
-              <span className="text-white font-bold text-lg md:text-xl">
-                {myLinks.length}
-              </span>
+              <span className="text-slate-300 text-sm md:text-base">Total Links: </span>
+              <span className="text-white font-bold text-lg md:text-xl">{myLinks.length}</span>
             </div>
           </div>
 
@@ -114,23 +107,18 @@ const Page = () => {
           {/* Main Container */}
           <div className="bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden">
             {isLoading ? (
-              // Loading State
               <div className="flex flex-col items-center justify-center py-16 md:py-24">
                 <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mb-4"></div>
                 <p className="text-slate-400">Loading your links...</p>
               </div>
             ) : myLinks.length === 0 ? (
-              // Empty State
               <div className="flex flex-col items-center justify-center py-16 md:py-24 px-4">
                 <div className="w-20 h-20 md:w-24 md:h-24 bg-slate-700/50 rounded-full flex items-center justify-center mb-6">
                   <AlertCircle className="w-10 h-10 md:w-12 md:h-12 text-slate-500" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">
-                  No Links Yet
-                </h3>
+                <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">No Links Yet</h3>
                 <p className="text-slate-400 text-center mb-6 max-w-md">
-                  You haven't created any shortened links yet. Start shortening
-                  your URLs now!
+                  You haven't created any shortened links yet. Start shortening your URLs now!
                 </p>
                 <Link
                   href="/shortner"
@@ -147,26 +135,15 @@ const Page = () => {
                   <table className="w-full">
                     <thead>
                       <tr className="bg-slate-800/50 border-b border-slate-700">
-                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
-                          #
-                        </th>
-                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
-                          Short URL
-                        </th>
-                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
-                          Original URL
-                        </th>
-                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
-                          Actions
-                        </th>
+                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">#</th>
+                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Short URL</th>
+                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Original URL</th>
+                        <th className="py-4 px-6 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700/50">
                       {filteredLinks.map((link, index) => (
-                        <tr
-                          key={index}
-                          className="hover:bg-slate-700/30 transition-colors duration-200 group"
-                        >
+                        <tr key={index} className="hover:bg-slate-700/30 transition-colors duration-200 group">
                           <td className="py-4 px-6">
                             <span className="inline-flex items-center justify-center w-8 h-8 bg-slate-700/50 rounded-lg text-slate-300 font-medium text-sm">
                               {index + 1}
@@ -188,18 +165,16 @@ const Page = () => {
                             </div>
                           </td>
                           <td className="py-4 px-6">
+                            {/* ✅ FIXED: orignalUrl */}
                             <p className="text-slate-300 break-all max-w-xs truncate">
-                              {link.originalUrl}
+                              {link.orignalUrl}
                             </p>
                           </td>
                           <td className="py-4 px-6">
                             <div className="flex items-center gap-2">
-                              {/* Copy Button */}
                               <button
                                 onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    `${domain}/${link.shortUrl}`
-                                  );
+                                  navigator.clipboard.writeText(`${domain}/${link.shortUrl}`);
                                   setCopied(index);
                                   setTimeout(() => setCopied(false), 2000);
                                 }}
@@ -222,7 +197,6 @@ const Page = () => {
                                 )}
                               </button>
 
-                              {/* View Clicks Button */}
                               <Link
                                 href="/clicks"
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition-all duration-300"
@@ -231,7 +205,6 @@ const Page = () => {
                                 Clicks
                               </Link>
 
-                              {/* Delete Button */}
                               <button
                                 onClick={() => handleDelete(index)}
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-xl text-sm font-medium hover:bg-red-500/30 transition-all duration-300"
@@ -250,11 +223,7 @@ const Page = () => {
                 {/* Mobile & Tablet Card View */}
                 <div className="lg:hidden divide-y divide-slate-700/50 max-h-[70vh] overflow-y-auto">
                   {filteredLinks.map((link, index) => (
-                    <div
-                      key={index}
-                      className="p-4 md:p-6 hover:bg-slate-700/20 transition-colors"
-                    >
-                      {/* Card Header */}
+                    <div key={index} className="p-4 md:p-6 hover:bg-slate-700/20 transition-colors">
                       <div className="flex items-start justify-between mb-4">
                         <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg text-white font-bold text-sm">
                           {index + 1}
@@ -267,7 +236,6 @@ const Page = () => {
                         </button>
                       </div>
 
-                      {/* Short URL */}
                       <div className="mb-4">
                         <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 block">
                           Short URL
@@ -285,23 +253,20 @@ const Page = () => {
                         </div>
                       </div>
 
-                      {/* Original URL */}
                       <div className="mb-4">
                         <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 block">
                           Original URL
                         </label>
+                        {/* ✅ FIXED: orignalUrl */}
                         <p className="text-slate-300 break-all text-sm md:text-base line-clamp-2">
-                          {link.originalUrl}
+                          {link.orignalUrl}
                         </p>
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => {
-                            navigator.clipboard.writeText(
-                              `${domain}/${link.shortUrl}`
-                            );
+                            navigator.clipboard.writeText(`${domain}/${link.shortUrl}`);
                             setCopied(index);
                             setTimeout(() => setCopied(false), 2000);
                           }}
@@ -340,12 +305,8 @@ const Page = () => {
                 {filteredLinks.length === 0 && searchTerm && (
                   <div className="flex flex-col items-center justify-center py-12 px-4">
                     <Search className="w-12 h-12 text-slate-500 mb-4" />
-                    <h3 className="text-lg font-semibold text-white mb-2">
-                      No Results Found
-                    </h3>
-                    <p className="text-slate-400 text-center">
-                      No links match "{searchTerm}"
-                    </p>
+                    <h3 className="text-lg font-semibold text-white mb-2">No Results Found</h3>
+                    <p className="text-slate-400 text-center">No links match "{searchTerm}"</p>
                   </div>
                 )}
               </>
