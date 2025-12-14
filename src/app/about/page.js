@@ -90,7 +90,7 @@ const Page = () => {
             </h1>
 
             <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-              Your all-in-one solution for URL shortening, QR code generation, and link analytics. Simple, fast, and powerful.
+              Your all-in-one solution for URL shortening, QR code generation, and link analytics. Simple, fast, and powerful, emergency .
             </p>
 
             {/* CTA Buttons */}
