@@ -46,7 +46,7 @@ npm run dev
 
 Your app will be available at:
 
-http://localhost:3000
+url-shortner-five-phi-44.vercel.app
 
 📊 Usage
 
