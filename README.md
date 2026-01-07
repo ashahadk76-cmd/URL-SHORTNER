@@ -2,6 +2,9 @@ URLShortner
 
 A simple, fast, and efficient URL shortening tool that allows users to generate short URLs, create QR codes, and manage their personal links directly in the browser. The app uses a database to store global short URLs, while each user’s generated links and QR codes are stored in LocalStorage for a personalized dashboard experience.
 
+
+url open in your browser-(https://url-shortner-five-phi-44.vercel.app)
+
 ✨ Features
 
 Shorten Long URLs — Instantly create short URLs from long links.
